@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Vue.MainWindow">
+  <grid id="27dc6" binding="MainPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="1000" height="800"/>
+    </constraints>
+    <properties>
+      <foreground color="-1733561"/>
+      <minimumSize width="1000" height="800"/>
+      <preferredSize width="1000" height="800"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="9fada" layout-manager="GridBagLayout">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-1733561"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="92e65" binding="ConnexionPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="5" bottom="1" right="5"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="0.1"/>
+            </constraints>
+            <properties/>
+            <border type="none" title="Connexion">
+              <font/>
+              <title-color color="-13947600"/>
+            </border>
+            <children>
+              <grid id="d3d36" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="bbb0c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Nom de l'employe : "/>
+                    </properties>
+                  </component>
+                  <component id="269b0" class="javax.swing.JTextField" binding="textFieldLogin">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="80" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="bb37c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Mot de passe : "/>
+                    </properties>
+                  </component>
+                  <component id="3e81b" class="javax.swing.JTextField" binding="textFieldMdp">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="80" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                </children>
+              </grid>
+              <grid id="f48c1" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="1ceca" class="javax.swing.JButton" binding="loginButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Login"/>
+                    </properties>
+                  </component>
+                  <component id="6638a" class="javax.swing.JButton" binding="logoutButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Logout"/>
+                      <verticalAlignment value="0"/>
+                    </properties>
+                  </component>
+                  <component id="21379" class="javax.swing.JCheckBox" binding="nouveauEmployeCheckBox">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <margin top="30" left="40" bottom="30" right="30"/>
+                      <text value="Nouveau employe"/>
+                    </properties>
+                  </component>
+                  <component id="50e4a" class="javax.swing.JCheckBox" binding="TLScheckBox">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="TLS secure"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="e18b4" binding="MagasinPanel" layout-manager="GridLayoutManager" row-count="6" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="5" bottom="5" right="5"/>
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="1.5" weighty="1.0"/>
+            </constraints>
+            <properties/>
+            <border type="none" title="Facturation" title-justification="1">
+              <font/>
+              <title-color color="-13947600"/>
+            </border>
+            <children>
+              <scrollpane id="47599" binding="JScrollFactures">
+                <constraints>
+                  <grid row="1" column="0" row-span="4" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </scrollpane>
+              <component id="53783" class="javax.swing.JButton" binding="payerButton">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Payer"/>
+                </properties>
+              </component>
+              <component id="9702a" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Id client :"/>
+                </properties>
+              </component>
+              <component id="d484a" class="javax.swing.JButton" binding="afficherFacturesButton">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Afficher les factures"/>
+                </properties>
+              </component>
+              <component id="5573" class="javax.swing.JTextField" binding="idClientTextField">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font swing-font="Button.font"/>
+                  <text value=""/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="a7c78" binding="PublicitePanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="5" bottom="5" right="5"/>
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="0.1"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+          <grid id="a9e52" binding="PanierPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="5" bottom="5" right="5"/>
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+            </constraints>
+            <properties/>
+            <border type="none" title="Detail facture">
+              <font/>
+              <title-color color="-13947600"/>
+            </border>
+            <children>
+              <grid id="5dd07" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="4" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="380bc" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="3b9d2" class="javax.swing.JButton" binding="detailFactureButton">
+                        <constraints>
+                          <grid row="0" column="1" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Recuperer le detail de la facture"/>
+                        </properties>
+                      </component>
+                      <component id="a1a8b" class="javax.swing.JTextField" binding="idFactureTextField">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="b292" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Id facture :"/>
+                    </properties>
+                  </component>
+                  <scrollpane id="f4138" binding="JScrollArticles">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </scrollpane>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
