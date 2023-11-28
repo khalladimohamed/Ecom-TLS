@@ -32,7 +32,7 @@ public class ThreadServeurPoolTLS extends ThreadServeurTLS
     @Override
     public void run()
     {
-        logger.Trace("Démarrage du TH Serveur (Pool)...");
+        logger.Trace("Démarrage du TH Serveur TLS (Pool)...");
         // Création du pool de threads
         try
         {
