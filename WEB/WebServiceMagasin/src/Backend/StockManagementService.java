@@ -3,36 +3,67 @@ package Backend;
 import Backend.JDBC.BeanGenerique;
 import Backend.JDBC.BeanMetier;
 import Backend.Logger.LoggerConsole;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import javax.net.ssl.*;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StockManagementService {
 
-    public static void main(String[] args) throws IOException {
-        HttpServer serveur = null;
+    public static void main(String[] args) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException, KeyManagementException {
+        HttpsServer server = HttpsServer.create(new InetSocketAddress(8443), 0);
+        SSLContext sslContext = SSLContext.getInstance("TLS");
 
-        try {
-            serveur = HttpServer.create(new InetSocketAddress(8080), 0);
-
-            // Ajout du gestionnaire statique
-            serveur.createContext("/", new StaticHandler());
-
-            serveur.createContext("/api", new StockHandler());
-
-            System.out.println("Démarrage du serveur HTTP...");
-            serveur.start();
-        } catch (IOException e) {
-            System.out.println("Erreur: " + e.getMessage());
+        // Chargement du keystore
+        char[] password = "ecom2023".toCharArray();
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        try (InputStream keyStoreStream = new FileInputStream("keystoreServeurHttps.jks")) {
+            keyStore.load(keyStoreStream, password);
         }
+
+        // Initialisation du gestionnaire de clés
+        char[] keyPassword = "cleServeur".toCharArray();
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+        keyManagerFactory.init(keyStore, keyPassword);
+
+        // Initialisation du gestionnaire de confiance
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+        trustManagerFactory.init(keyStore);
+
+        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+        server.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
+            public void configure(HttpsParameters params) {
+                try {
+                    SSLContext c = SSLContext.getDefault();
+                    SSLEngine engine = c.createSSLEngine();
+                    params.setNeedClientAuth(false);
+                    params.setCipherSuites(engine.getEnabledCipherSuites());
+                    params.setProtocols(engine.getEnabledProtocols());
+
+                    // Obtenez le contexte SSL de votre SSLContext et définissez-le
+                    SSLParameters sslParameters = c.getDefaultSSLParameters();
+                    params.setSSLParameters(sslParameters);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
+        // Ajout du gestionnaire statique
+        server.createContext("/", new StaticHandler());
+
+        server.createContext("/api", new StockHandler());
+
+        System.out.println("Démarrage du serveur HTTPS...");
+        server.start();
+
     }
 
     static class StockHandler implements HttpHandler {

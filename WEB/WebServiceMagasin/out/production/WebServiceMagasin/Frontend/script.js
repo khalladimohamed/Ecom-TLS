@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function loadArticles() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/api", true);
+    xhr.open("GET", "https://localhost:8443/api", true);
 
     xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -79,7 +79,7 @@ function updateStock() {
     var stock = document.getElementById("stockInput").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8080/api", true);
+    xhr.open("POST", "https://localhost:8443/api", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
