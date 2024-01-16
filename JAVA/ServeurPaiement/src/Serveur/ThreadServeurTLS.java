@@ -42,7 +42,7 @@ public abstract class ThreadServeurTLS extends Thread
 
         SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
 
-        sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(53000);
+        sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(port);
 
     }
 }
