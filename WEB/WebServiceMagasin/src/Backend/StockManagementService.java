@@ -3,20 +3,53 @@ package Backend;
 import Backend.JDBC.BeanGenerique;
 import Backend.JDBC.BeanMetier;
 import Backend.Logger.LoggerConsole;
-import com.sun.net.httpserver.*;
+import Backend.StaticHandlers.HandlerCss;
+import Backend.StaticHandlers.HandlerHtml;
+import Backend.StaticHandlers.HandlerImages;
+import Backend.StaticHandlers.HandlerJavascript;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
-import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.security.*;
-import java.security.cert.CertificateException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import com.sun.net.httpserver.*;
+import javax.net.ssl.*;
+import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
+
 
 public class StockManagementService {
 
     public static void main(String[] args) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException, KeyManagementException {
-        HttpsServer server = HttpsServer.create(new InetSocketAddress(8443), 0);
+
+        ///////////////////////////// NON SECURISE ////////////////////////////////////////////////
+        HttpServer serveur = null;
+        try {
+            serveur = HttpServer.create(new InetSocketAddress(8080), 0);
+
+            serveur.createContext("/", new HandlerHtml());
+            serveur.createContext("/css", new HandlerCss());
+            serveur.createContext("/js", new HandlerJavascript());
+            serveur.createContext("/images", new HandlerImages());
+
+            serveur.createContext("/api", new StockHandler());
+
+            System.out.println("Démarrage du serveur HTTP...");
+            serveur.start();
+        } catch (IOException e) {
+            System.out.println("Erreur: " + e.getMessage());
+        }
+
+
+        ///////////////////////////////// SECURISE ////////////////////////////////////////////////
+        HttpsServer serveurSecurise = HttpsServer.create(new InetSocketAddress(8443), 0);
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
         // Chargement du keystore
@@ -37,7 +70,7 @@ public class StockManagementService {
 
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
 
-        server.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
+        serveurSecurise.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
             public void configure(HttpsParameters params) {
                 try {
                     SSLContext c = SSLContext.getDefault();
@@ -46,7 +79,7 @@ public class StockManagementService {
                     params.setCipherSuites(engine.getEnabledCipherSuites());
                     params.setProtocols(engine.getEnabledProtocols());
 
-                    // Obtenez le contexte SSL de votre SSLContext et définissez-le
+                    // Obtient le contexte SSL de SSLContext et définie-le
                     SSLParameters sslParameters = c.getDefaultSSLParameters();
                     params.setSSLParameters(sslParameters);
                 } catch (Exception ex) {
@@ -56,15 +89,18 @@ public class StockManagementService {
         });
 
 
-        // Ajout du gestionnaire statique
-        server.createContext("/", new StaticHandler());
+        // Ajout des gestionnaires statiques
+        serveurSecurise.createContext("/", new HandlerHtml());
+        serveurSecurise.createContext("/css", new HandlerCss());
+        serveurSecurise.createContext("/js", new HandlerJavascript());
+        serveurSecurise.createContext("/images", new HandlerImages());
 
-        server.createContext("/api", new StockHandler());
+        serveurSecurise.createContext("/api", new StockHandler());
 
         System.out.println("Démarrage du serveur HTTPS...");
-        server.start();
-
+        serveurSecurise.start();
     }
+
 
     static class StockHandler implements HttpHandler {
 
@@ -81,33 +117,29 @@ public class StockManagementService {
         }
 
         LoggerConsole logger = new LoggerConsole();
-
         BeanMetier beanMetier = new BeanMetier(logger);
 
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Credentials", "true");
-
 
             String method = exchange.getRequestMethod();
 
             if (method.equals("GET")) {
+                System.out.println("--- Requête GET reçue (obtenir les articles) ---");
                 handleGetRequest(exchange);
             } else if (method.equals("POST")) {
+                System.out.println("--- Requête POST reçue (mise a jour du stock) ---");
                 handlePostRequest(exchange);
             }
         }
+
 
         private void handleGetRequest(HttpExchange exchange) throws IOException {
             try {
                 ResultSet resultSet = beanMetier.getAllArticles();
                 String jsonResponse = convertResultSetToJson(resultSet);
 
-                // Utilisez getBytes("UTF-8").length pour obtenir la longueur correcte en octets
                 byte[] responseBytes = jsonResponse.getBytes("UTF-8");
 
                 exchange.sendResponseHeaders(200, responseBytes.length);
@@ -116,9 +148,10 @@ public class StockManagementService {
                 os.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-                exchange.sendResponseHeaders(500, -1); // Internal Server Error
+                exchange.sendResponseHeaders(500, -1);
             }
         }
+
 
         private void handlePostRequest(HttpExchange exchange) throws IOException {
             try {
@@ -127,7 +160,13 @@ public class StockManagementService {
                 String postData = br.readLine();
 
                 boolean updateSuccessful = updateArticle(postData);
-                String response = updateSuccessful ? "Oui" : "Non";
+
+                String response;
+                if (updateSuccessful) {
+                    response = "Oui";
+                } else {
+                    response = "Non";
+                }
 
                 exchange.sendResponseHeaders(200, response.length());
                 OutputStream os = exchange.getResponseBody();
@@ -135,27 +174,24 @@ public class StockManagementService {
                 os.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-                exchange.sendResponseHeaders(500, -1); // Internal Server Error
+                exchange.sendResponseHeaders(500, -1);
             }
         }
 
+
         private boolean updateArticle(String postData) throws SQLException {
-            // Divisez les paramètres basés sur le caractère '&'
             String[] params = postData.split("&");
 
-            // Initialisez les variables
             int idArticle = 0;
             float prix = 0;
             int stock = 0;
 
-            // Parcourez les paramètres pour extraire les valeurs
             for (String param : params) {
                 String[] keyValue = param.split("=");
                 if (keyValue.length == 2) {
                     String key = keyValue[0];
                     String value = keyValue[1];
 
-                    // Assurez-vous de traiter correctement chaque clé et valeur
                     switch (key) {
                         case "idArticle":
                             idArticle = Integer.parseInt(value);
@@ -166,12 +202,10 @@ public class StockManagementService {
                         case "stock":
                             stock = Integer.parseInt(value);
                             break;
-                        // Ajoutez d'autres cas si nécessaire
                     }
                 }
             }
 
-            // Appelez la méthode de mise à jour avec les valeurs extraites
             return beanMetier.updateArticle(idArticle, prix, stock);
         }
 

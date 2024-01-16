@@ -1,14 +1,24 @@
 var selectedArticleId = null;
-var articles = []; // Tableau pour stocker localement la liste des articles
+var articles = [];
+
 
 document.addEventListener("DOMContentLoaded", function () {
     loadArticles();
     clearDetails();
 });
 
+
 function loadArticles() {
+    // L'URL complète de la page actuelle
+    var url = window.location.href;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://localhost:8443/api", true);
+
+    if (url.startsWith("https://")) {
+        xhr.open("GET", "https://localhost:8443/api", true);
+    } else
+    {
+        xhr.open("GET", "http://localhost:8080/api", true);
+    }
 
     xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -41,6 +51,7 @@ function loadArticles() {
     xhr.send();
 }
 
+
 function showDetails(articleId) {
     selectedArticleId = articleId;
 
@@ -56,6 +67,7 @@ function showDetails(articleId) {
     }
 }
 
+
 function displayArticleDetails(articleDetails) {
     document.getElementById("selectedItem").innerHTML =
         "<h3>Article sélectionné</h3>" +
@@ -63,11 +75,12 @@ function displayArticleDetails(articleDetails) {
         "<p>Intitulé: " + articleDetails.intitule + "</p>" +
         "<p>Prix: " + articleDetails.prix + "</p>" +
         "<p>Stock: " + articleDetails.stock + "</p>" +
-        "<img src='images/" + articleDetails.image + "' alt='Image de l'article'>";
+        "<img src=images/" + articleDetails.image + " alt='Image non disponible'>";
 
     document.getElementById("priceInput").value = articleDetails.prix;
     document.getElementById("stockInput").value = articleDetails.stock;
 }
+
 
 function updateStock() {
     if (selectedArticleId === null) {
@@ -78,15 +91,24 @@ function updateStock() {
     var prix = document.getElementById("priceInput").value;
     var stock = document.getElementById("stockInput").value;
 
+    // L'URL complète de la page actuelle
+    var url = window.location.href;
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://localhost:8443/api", true);
+
+    if (url.startsWith("https://")) {
+        xhr.open("POST", "https://localhost:8443/api", true);
+    } else
+    {
+        xhr.open("POST", "http://localhost:8080/api", true);
+    }
+
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 alert("Mise à jour réussie!");
-                // Mettez à jour la table ou effectuez d'autres actions nécessaires
+
                 loadArticles();
                 clearDetails();
             } else {

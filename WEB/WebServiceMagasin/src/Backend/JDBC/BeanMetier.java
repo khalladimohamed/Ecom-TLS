@@ -29,12 +29,6 @@ public class BeanMetier {
     }
 
 
-    public synchronized ResultSet getArticleDetails(int articleId) throws SQLException {
-        String query = "SELECT * FROM articles WHERE id = " + articleId;
-        return BeanGenerique.executeQuery(query);
-    }
-
-
     public synchronized ResultSet getAllArticles() throws SQLException {
         String query = "SELECT * FROM articles";
         return BeanGenerique.executeQuery(query);
